@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import './env.js';
 import { pool } from './db/client.js';
 import { OpenAIEmbedder } from './embeddings/openai.js';
 import { seedHive } from './db/seed.js';

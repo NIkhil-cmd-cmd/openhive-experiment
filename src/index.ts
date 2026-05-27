@@ -1,4 +1,4 @@
-import 'dotenv/config';
+import './env.js';
 import { runBenchmark } from './benchmark/runner.js';
 import { pool } from './db/client.js';
 

@@ -10,38 +10,55 @@ Self-contained benchmark to validate whether KNN retrieval and Markov routing im
 
 ## Prerequisites
 
-- Docker and Docker Compose
 - Node.js 20+
+- Postgres 16 with pgvector (local Homebrew install works; Docker optional)
 - OpenAI API key (embeddings)
 - Anthropic API key (agent runs via Claude Sonnet)
 
-## Quick start
+## Quick start (local Postgres — no Docker)
 
 ```bash
 cd openhive-experiment
 
 # 1. Configure environment
-cp .env.example .env
-# Edit .env with OPENAI_API_KEY and ANTHROPIC_API_KEY
+cp .env.example .env.local
+# Edit .env.local with OPENAI_API_KEY and ANTHROPIC_API_KEY
 
-# 2. Start Postgres + pgvector
-npm run db:up
+# 2. Ensure Postgres is running
+brew services start postgresql@16
 
-# 3. Install dependencies
+# 3. Install pgvector for Postgres 16 (one-time, if needed)
+git clone --depth 1 --branch v0.8.2 https://github.com/pgvector/pgvector.git /tmp/pgvector-build
+cd /tmp/pgvector-build && PG_CONFIG=$(brew --prefix postgresql@16)/bin/pg_config make && make install
+
+# 4. Create database + schema
 npm install
+npm run db:setup
 
-# 4. Run the full experiment (auto-seeds hive if < 100 traces)
+# 5. Run the experiment (auto-seeds hive if needed)
 npm run bench
 
-# 5. View results
+# 6. View results
 cat experiment-results-*.md
+```
+
+## Quick start (Docker)
+
+If you have Docker installed:
+
+```bash
+cp .env.example .env.local
+npm run db:up
+npm install
+npm run bench
 ```
 
 ## Scripts
 
 | Script | Description |
 |--------|-------------|
-| `npm run db:up` | Start Postgres with pgvector |
+| `npm run db:setup` | Create local Postgres DB + schema (no Docker) |
+| `npm run db:up` | Start Postgres with pgvector via Docker |
 | `npm run db:down` | Stop Postgres |
 | `npm run db:reset` | Wipe volume and restart fresh |
 | `npm run seed-only` | Seed hive traces without running benchmark |

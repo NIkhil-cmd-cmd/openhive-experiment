@@ -6,6 +6,7 @@
     "start": "node --loader ts-node/esm src/index.ts",
     "seed-only": "node --loader ts-node/esm src/seed-cli.ts",
     "bench": "node --loader ts-node/esm src/index.ts",
+    "db:setup": "bash scripts/db-setup-local.sh",
     "db:up": "docker compose up -d && sleep 3",
     "db:down": "docker compose down",
     "db:reset": "docker compose down -v && docker compose up -d && sleep 3"
