@@ -1,0 +1,5 @@
+node_modules/
+dist/
+.env
+experiment-results-*.json
+experiment-results-*.md
